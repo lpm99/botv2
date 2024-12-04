@@ -1,6 +1,4 @@
-from string import punctuation
-
-from aiogram import F, Bot, types, Router
+from aiogram import Bot, types, Router
 from aiogram.filters import Command
 
 from filters.chat_types import ChatTypeFilter
@@ -15,7 +13,7 @@ user_group_router.edited_message.filter(ChatTypeFilter(["group", "supergroup"]))
 async def get_admins(message: types.Message, bot: Bot):
     chat_id = message.chat.id
     admins_list = await bot.get_chat_administrators(chat_id)
-   
+
     admins_list = [
         member.user.id
         for member in admins_list
@@ -24,4 +22,3 @@ async def get_admins(message: types.Message, bot: Bot):
     bot.my_admins_list = admins_list
     if message.from_user.id in admins_list:
         await message.delete()
-   

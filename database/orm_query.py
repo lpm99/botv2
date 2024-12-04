@@ -11,7 +11,7 @@ async def orm_add_banner_description(session: AsyncSession, data: dict):
     result = await session.execute(query)
     if result.first():
         return
-    session.add_all([Banner(name=name, description=description) for name, description in data.items()]) 
+    session.add_all([Banner(name=name, description=description) for name, description in data.items()])
     await session.commit()
 
 
@@ -33,11 +33,11 @@ async def orm_get_info_pages(session: AsyncSession):
     return result.scalars().all()
 
 
-
 async def orm_get_categories(session: AsyncSession):
     query = select(Category)
     result = await session.execute(query)
     return result.scalars().all()
+
 
 async def orm_create_categories(session: AsyncSession, categories: list):
     query = select(Category)
@@ -112,7 +112,9 @@ async def orm_add_user(
 
 
 async def orm_add_to_cart(session: AsyncSession, user_id: int, product_id: int):
-    query = select(Cart).where(Cart.user_id == user_id, Cart.product_id == product_id).options(joinedload(Cart.product))
+    query = select(Cart).where(
+        Cart.user_id == user_id, Cart.product_id == product_id
+    ).options(joinedload(Cart.product))
     cart = await session.execute(query)
     cart = cart.scalar()
     if cart:
@@ -122,7 +124,6 @@ async def orm_add_to_cart(session: AsyncSession, user_id: int, product_id: int):
     else:
         session.add(Cart(user_id=user_id, product_id=product_id, quantity=1))
         await session.commit()
-
 
 
 async def orm_get_user_carts(session: AsyncSession, user_id):
@@ -154,4 +155,40 @@ async def orm_reduce_product_in_cart(session: AsyncSession, user_id: int, produc
         return False
 
 
+class CategoryDAL:
+    @staticmethod
+    async def create(db_session: AsyncSession, **kwargs) -> Category:
+        new_category = Category(**kwargs)
+        db_session.add(new_category)
+        await db_session.commit()
 
+        return new_category
+
+    @staticmethod
+    async def read(db_session: AsyncSession, **kwargs) -> list[Category] | None:
+        stmt = select(Category).filter_by(**kwargs)
+        categories = await db_session.scalars(stmt)
+
+        return categories.fetchall()
+
+    @staticmethod
+    async def read_lo(db_session: AsyncSession, limit: int, offset: int, **kwargs) -> list[Category] | None:
+        stmt = select(Category).filter_by(**kwargs).limit(limit).offset(offset)
+        categories = await db_session.scalars(stmt)
+
+        return categories.fetchall()
+
+    @staticmethod
+    async def update(db_session: AsyncSession, category_id: int = None, **kwargs) -> Category | None:
+        result = await db_session.execute(
+            update(Category).where(Category.id == category_id).values(kwargs).returning(Category)
+        )
+        await db_session.commit()
+        return result.scalar_one_or_none()
+
+    @staticmethod
+    async def delete(db_session: AsyncSession, **kwargs) -> bool:
+        stmt = delete(Category).filter_by(**kwargs)
+        await db_session.execute(stmt)
+        await db_session.commit()
+        return True

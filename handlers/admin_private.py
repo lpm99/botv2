@@ -27,6 +27,7 @@ admin_router.message.filter(ChatTypeFilter(["private"]), IsAdmin())
 
 
 ADMIN_KB = get_keyboard(
+    "Категории",
     "Добавить товар",
     "Ассортимент",
     "Добавить/Изменить баннер",
@@ -41,7 +42,7 @@ async def admin_features(message: types.Message):
 
 
 @admin_router.message(F.text == 'Ассортимент')
-async def admin_features(message: types.Message, session: AsyncSession):
+async def category_list(message: types.Message, session: AsyncSession):
     categories = await orm_get_categories(session)
     btns = {category.name : f'category_{category.id}' for category in categories}
     await message.answer("Выберите категорию", reply_markup=get_callback_btns(btns=btns))
@@ -113,7 +114,7 @@ async def add_banner2(message: types.Message, state: FSMContext):
 
 
 
-######################### FSM для дабавления/изменения товаров админом ###################
+######################### FSM для добавления/изменения товаров админом ###################
 
 class AddProduct(StatesGroup):
     # Шаги состояний
@@ -183,7 +184,7 @@ async def back_step_handler(message: types.Message, state: FSMContext) -> None:
 
     if current_state == AddProduct.name:
         await message.answer(
-            'Предидущего шага нет, или введите название товара или напишите "отмена"'
+            'Предыдущего шага нет, или введите название товара или напишите "отмена"'
         )
         return
 
