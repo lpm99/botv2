@@ -31,7 +31,6 @@ dp.include_router(admin_private_category.router)
 
 
 async def on_startup(bot):
-
     await create_db()
 
 

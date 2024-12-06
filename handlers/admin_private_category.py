@@ -49,7 +49,7 @@ async def admin_add_category(callback: types.CallbackQuery, state: FSMContext):
 
 
 @router.message(AdminCategoryStates.category_name)
-async def admin_input_category(message: types.Message, state: FSMContext, session: AsyncSession):
+async def admin_input_category(message: types.Message, session: AsyncSession):
     """Сохранение категории"""
     if message.content_type != 'text':
         return await message.answer('Категория должна быть строкой')

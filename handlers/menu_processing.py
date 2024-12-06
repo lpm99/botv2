@@ -1,7 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from aiogram.types import InputMediaPhoto
 
-from database.orm_query import orm_add_to_cart, orm_delete_from_cart, orm_get_banner, orm_get_categories, orm_get_products, orm_get_user_carts, orm_reduce_product_in_cart
+from database.orm_query import (
+    orm_add_to_cart, orm_delete_from_cart, orm_get_banner, orm_get_categories, orm_get_products, orm_get_user_carts, orm_reduce_product_in_cart
+)
 from kbds.inline import get_products_btns, get_user_cart, get_user_catalog_btns, get_user_main_btns
 from utils.paginator import Paginator
 
@@ -34,9 +36,9 @@ def pages(paginator: Paginator):
 
 
 async def products(session, level, category, page):
-    products = await orm_get_products(session, category_id=category)
+    db_products = await orm_get_products(session, category_id=category)
 
-    paginator = Paginator(products, page=page)
+    paginator = Paginator(db_products, page=page)
     if len(paginator.get_page()) == 0:
         return None, None
     product = paginator.get_page()[0]
@@ -73,9 +75,9 @@ async def carts(session, level, menu_name, page, user_id, product_id):
     elif menu_name == "increment":
         await orm_add_to_cart(session, user_id, product_id)
 
-    carts = await orm_get_user_carts(session, user_id)
+    db_carts = await orm_get_user_carts(session, user_id)
 
-    if not carts:
+    if not db_carts:
         banner = await orm_get_banner(session, "cart")
         image = InputMediaPhoto(
             media=banner.image, caption=f"<strong>{banner.description}</strong>"
@@ -89,13 +91,13 @@ async def carts(session, level, menu_name, page, user_id, product_id):
         )
 
     else:
-        paginator = Paginator(carts, page=page)
+        paginator = Paginator(db_carts, page=page)
 
         cart = paginator.get_page()[0]
 
         cart_price = round(cart.quantity * cart.product.price, 2)
         total_price = round(
-            sum(cart.quantity * cart.product.price for cart in carts), 2
+            sum(cart.quantity * cart.product.price for cart in db_carts), 2
         )
         image = InputMediaPhoto(
             media=cart.product.image,
