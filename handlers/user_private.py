@@ -14,7 +14,6 @@ from config import CARD_INFO
 class UserStates(StatesGroup):
     phone_number = State()
     custom_model_description = State()
-    product_size = State()
 
 
 router = Router()
@@ -23,15 +22,11 @@ router.message.filter(ChatTypeFilter(["private"]))
 
 @router.message(CommandStart())
 async def start_cmd(message: types.Message, session: AsyncSession):
-    media, reply_markup = await get_menu_content(session, level=0, menu_name='main')
+    media, reply_markup=await get_menu_content(session, level=0, menu_name='main')
     await message.answer_photo(media.media, caption=media.caption, reply_markup=reply_markup)
 
 
-async def add_to_cart(
-    callback: types.CallbackQuery, callback_data: MenuCallBack, session: AsyncSession, state: FSMContext,
-):
-    await callback.answer()
-
+async def add_to_cart(callback: types.CallbackQuery, callback_data: MenuCallBack, session: AsyncSession):
     user = callback.from_user
     await orm_add_user(
         session,
@@ -40,30 +35,8 @@ async def add_to_cart(
         last_name=user.last_name,
         phone=None,
     )
-    await callback.message.answer("Введите размер модельки которые хотите заказать (в см)")
-    await state.set_state(UserStates.product_size)
-    await state.update_data(product_id=callback_data.product_id)
-
-
-@router.message(UserStates.product_size)
-async def get_size_for_product(message: types.Message, session: AsyncSession, state: FSMContext):
-    product_size = message.text
-    user = message.from_user
-
-    if not product_size.isdigit():
-        return await message.answer('Размер должен быть в виде числа')
-    product_size = int(product_size)
-
-    data = await state.get_data()
-    product_id = data['product_id']
-
-    await orm_add_to_cart(session, user_id=user.id, product_id=product_id, size=product_size)
-
-    price = 1 * product_size
-
-    await message.answer(
-        f'Ваш товар добавлен в корзину, цена модели = {price}'
-    )
+    await orm_add_to_cart(session, user_id=user.id, product_id=callback_data.product_id)
+    await callback.answer("Товар добавлен в корзину.")
 
 
 @router.callback_query(MenuCallBack.filter())
@@ -71,7 +44,7 @@ async def user_menu(
     callback: types.CallbackQuery, callback_data: MenuCallBack, session: AsyncSession, state: FSMContext
 ):
     if callback_data.menu_name == 'add_to_cart':
-        await add_to_cart(callback, callback_data, session, state)
+        await add_to_cart(callback, callback_data, session)
         return
     elif callback_data.menu_name == 'about':
         await callback.answer()
@@ -183,6 +156,4 @@ async def send_to_manager_custom_model(message: types.Message, state: FSMContext
         elif message.content_type == 'photo':
             await bot.send_photo(admin_id, message.photo[0].file_id, caption=text)
 
-    await message.answer(
-        'Ваш контакт мы отправили менеджеру🧑‍💻 В ближайшее время он свяжется с вами'
-    )
+    await message.answer('Ваш контакт мы отправили менеджеру🧑‍💻 В ближайшее время он свяжется с вами')

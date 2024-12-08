@@ -53,7 +53,6 @@ class Cart(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
     product_id: Mapped[int] = mapped_column(ForeignKey('product.id', ondelete='CASCADE'), nullable=False)
     quantity: Mapped[int]
-    size: Mapped[int] = mapped_column(BigInteger)
 
     user: Mapped['User'] = relationship(backref='cart')
     product: Mapped['Product'] = relationship(backref='cart')
