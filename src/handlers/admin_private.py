@@ -5,7 +5,7 @@ from aiogram.fsm.state import State, StatesGroup
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.orm_query import (
+from src.database.orm_query import (
     orm_change_banner_image,
     orm_get_categories,
     orm_add_product,
@@ -15,11 +15,9 @@ from database.orm_query import (
     orm_get_products,
     orm_update_product,
 )
-
-from filters.chat_types import ChatTypeFilter, IsAdmin
-
-from kbds.inline import get_callback_btns
-from kbds.reply import get_keyboard
+from src.filters.chat_types import ChatTypeFilter, IsAdmin
+from src.kbds.inline import get_callback_btns
+from src.kbds.reply import get_keyboard
 
 
 admin_router = Router()
@@ -284,7 +282,7 @@ async def add_price(message: types.Message, state: FSMContext):
 
 # Хендлер для отлова некорректных ввода для состояния price
 @admin_router.message(AddProduct.price)
-async def add_price2(message: types.Message, state: FSMContext):
+async def add_price2(message: types.Message):
     await message.answer("Вы ввели не допустимые данные, введите стоимость товара")
 
 
@@ -319,5 +317,5 @@ async def add_image(message: types.Message, state: FSMContext, session: AsyncSes
 
 # Ловим все прочее некорректное поведение для этого состояния
 @admin_router.message(AddProduct.image)
-async def add_image2(message: types.Message, state: FSMContext):
+async def smth_strange_handler(message: types.Message):
     await message.answer("Отправьте фото")

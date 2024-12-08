@@ -1,9 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from aiogram.types import InputMediaPhoto
 
-from database.orm_query import orm_add_to_cart, orm_delete_from_cart, orm_get_banner, orm_get_categories, orm_get_products, orm_get_user_carts, orm_reduce_product_in_cart
-from kbds.inline import get_products_btns, get_user_cart, get_user_catalog_btns, get_user_main_btns
-from utils.paginator import Paginator
+from src.database.orm_query import (
+    orm_add_to_cart, orm_delete_from_cart, orm_get_banner, orm_get_categories,
+    orm_get_products, orm_get_user_carts, orm_reduce_product_in_cart
+)
+from src.kbds.inline import (
+    get_products_btns, get_user_cart, get_user_catalog_btns, get_user_main_btns
+)
+from src.utils.paginator import Paginator
 
 
 async def main_menu(session, level, menu_name):

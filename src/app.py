@@ -5,14 +5,12 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.bot import DefaultBotProperties
 from aiogram.enums import ParseMode
 
-from middlewares.db import DataBaseSession
-
-from database.engine import create_db, session_maker
-
-from handlers import user_private, admin_private_category
-from handlers.user_group import user_group_router
-from handlers.admin_private import admin_router
-from config import TELEGRAM_BOT_TOKEN
+from src.middlewares.db import DataBaseSession
+from src.database.engine import create_db, session_maker
+from src.handlers import user_private, admin_private_category
+from src.handlers.user_group import user_group_router
+from src.handlers.admin_private import admin_router
+from src.config import TELEGRAM_BOT_TOKEN
 
 
 logging.basicConfig(level=logging.INFO)

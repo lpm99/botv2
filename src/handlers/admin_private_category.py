@@ -3,9 +3,9 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from filters.chat_types import ChatTypeFilter, IsAdmin
-from database.orm_query import CategoryDAL
-from kbds.inline import admin_category_keyboard
+from src.filters.chat_types import ChatTypeFilter, IsAdmin
+from src.database.orm_query import CategoryDAL
+from src.kbds.inline import admin_category_keyboard
 
 
 class AdminCategoryStates(StatesGroup):

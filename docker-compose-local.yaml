@@ -1,0 +1,11 @@
+services:
+  db:
+    container_name: "botv2-db"
+    image: postgres:14.1-alpine
+    env_file:
+      - ".env"
+    restart: always
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"

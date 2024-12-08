@@ -3,7 +3,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.orm_query import CategoryDAL
+from src.database.orm_query import CategoryDAL
 
 
 KEYBOARD_BUTTON_LENGTH = 5

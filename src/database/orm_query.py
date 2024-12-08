@@ -3,7 +3,7 @@ from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from database.models import Banner, Cart, Category, Product, User
+from src.database.models import Banner, Cart, Category, Product, User
 
 
 async def orm_add_banner_description(session: AsyncSession, data: dict):
