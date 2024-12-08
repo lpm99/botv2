@@ -1,0 +1,24 @@
+services:
+  bot:
+    container_name: "shop-bot"
+    command: bash -c "python -m src.app"
+    build:
+      context: .
+    restart: always
+    env_file:
+      - ".env"
+    depends_on:
+      - db
+  db:
+    container_name: "shop-db"
+    image: postgres:14.1-alpine
+    env_file:
+      - ".env"
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
