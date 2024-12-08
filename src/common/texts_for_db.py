@@ -15,8 +15,10 @@ description_for_info_pages = {
         as_marked_section(
             Bold("Варианты доставки/заказа:"),
             "Доставка",
-            "Самовынос",
+            "Самовывоз",
             "Почта",
+            "Яндекс Доставка",
+            "CDEK",
             marker="✅ ",
         ),
     ).as_html(),
