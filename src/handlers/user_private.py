@@ -76,7 +76,7 @@ async def channel_link_message(message: types.Message):
     await message.answer(
         '<b>О насℹ️</b>',
         reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[[
-            types.InlineKeyboardButton(text='Ссылка на канал', url='https://t.me/telegram')
+            types.InlineKeyboardButton(text='Ссылка на канал', url='https://web.telegram.org/a/#-1002465191855')
         ]]),
         parse_mode='html',
     )
@@ -118,8 +118,7 @@ async def send_card_info_to_user(message: types.Message, state: FSMContext, bot:
     for admin_id in bot.my_admins_list:
         await bot.send_message(admin_id, text)
 
-    text = (f'Ваш контакт мы отправили менеджеру🧑‍💻 В ближайшее время он свяжется с вами\n\n'
-            f'Реквизиты оплаты: {CARD_INFO}')
+    text = (f'Ваш контакт мы отправили менеджеру🧑‍💻 В ближайшее время он свяжется с вами\n\n')
     await message.answer(text, reply_markup=kb)
 
 
