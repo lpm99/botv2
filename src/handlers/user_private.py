@@ -76,7 +76,7 @@ async def channel_link_message(message: types.Message):
     await message.answer(
         '<b>О насℹ️</b>',
         reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[[
-            types.InlineKeyboardButton(text='Ссылка на канал', url='https://web.telegram.org/a/#-1002465191855')
+            types.InlineKeyboardButton(text='Ссылка на канал', url='https://t.me/goldpaw_workshop')
         ]]),
         parse_mode='html',
     )
