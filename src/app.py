@@ -15,6 +15,8 @@ from src.config import TELEGRAM_BOT_TOKEN
 
 logging.basicConfig(level=logging.INFO)
 
+print('check for commit')
+
 bot = Bot(
     token=TELEGRAM_BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML)
 )
