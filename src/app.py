@@ -19,7 +19,6 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(
     token=TELEGRAM_BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML)
 )
-bot.my_admins_list = [-1002497986286]
 
 dp = Dispatcher()
 

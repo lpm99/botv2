@@ -8,7 +8,7 @@ from src.database.orm_query import orm_add_to_cart, orm_add_user, orm_get_user_c
 from src.filters.chat_types import ChatTypeFilter
 from src.handlers.menu_processing import get_menu_content
 from src.kbds.inline import MenuCallBack
-from src.config import CARD_INFO
+from src.config import CARD_INFO, ADMIN_IDS
 
 
 class UserStates(StatesGroup):
@@ -115,7 +115,7 @@ async def send_card_info_to_user(message: types.Message, state: FSMContext, bot:
 
     text += f'\nСумма заказа: <code>{total_sum}</code>'
 
-    for admin_id in bot.my_admins_list:
+    for admin_id in ADMIN_IDS:
         await bot.send_message(admin_id, text)
 
     text = (f'Ваш контакт мы отправили менеджеру🧑‍💻 В ближайшее время он свяжется с вами\n\n')
@@ -149,7 +149,7 @@ async def send_to_manager_custom_model(message: types.Message, state: FSMContext
     else:
         await message.answer('Поддерживаются только фото и текст')
 
-    for admin_id in bot.my_admins_list:
+    for admin_id in ADMIN_IDS:
         if message.content_type == 'text':
             await bot.send_message(admin_id, text)
         elif message.content_type == 'photo':

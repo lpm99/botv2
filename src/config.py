@@ -9,3 +9,5 @@ TELEGRAM_BOT_TOKEN = os.getenv('TOKEN')
 DATABASE_URL = os.getenv('DB_URL')
 
 CARD_INFO = os.getenv('CARD_INFO')
+
+ADMIN_IDS = os.getenv('ADMIN_IDS').split(',')
