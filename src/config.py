@@ -10,4 +10,4 @@ DATABASE_URL = os.getenv('DB_URL')
 
 CARD_INFO = os.getenv('CARD_INFO')
 
-ADMIN_IDS = os.getenv('ADMIN_IDS').split(',')
+ADMIN_IDS = [int(admin_id) for admin_id in os.getenv('ADMIN_IDS').split(',')]
